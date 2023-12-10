@@ -28,10 +28,11 @@ void Print_chessboard(char print[ROWS][COLS], int row, int col)
 	for (int i = 1; i <= row; i++)
 	{
 		printf("%d ", i);
-
+		Sleep(10);
 		for (int j = 1; j <= col; j++)
 		{
 			printf("%c ", print[i][j]);
+			Sleep(0);
 		}
 		printf("\n");
 	}
@@ -103,6 +104,8 @@ void screening(char show[ROWS][COLS], char nime[ROWS][COLS], int row, int col)
 
 	while (win < row * col - EASY_COUNT)
 	{
+		system("cls");
+		Print_chessboard(show, ROW, COL);
 		printf("请输入排查的坐标:>\n");
 		scanf("%d %d", &x, &y);
 		if (x <= row && x >= 1 && y <= col && y >= 1)
@@ -118,8 +121,6 @@ void screening(char show[ROWS][COLS], char nime[ROWS][COLS], int row, int col)
 				int conte = printnime(nime, x, y);
 				show[x][y] = conte + '0';
 				Print_chessboard(show, ROW, COL);
-				Print_chessboard(nime, ROW, COL);
-
 				win++;
 			}
 		}

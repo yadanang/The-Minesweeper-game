@@ -21,7 +21,7 @@ void game()
 
 	//打印棋盘函数实现
 	Print_chessboard(show, ROW, COL);
-	Print_chessboard(mine, ROW, COL);
+	//Print_chessboard(mine, ROW, COL);
 
 
 	//布置雷
