@@ -1,12 +1,6 @@
 ﻿#include "game.h"
 
-//自定义设置函数
-void custom()
-{
-	int x = 0;
-	scanf("%d", &x);
 
-}
 
 //初始化函数
 void initialization(char initi[ROWS][COLS], int rows, int cols, char set)
@@ -159,10 +153,96 @@ void screening(char show[ROWS][COLS], char nime[ROWS][COLS], int row, int col)
 
 		if (win == row * col - EASY_COUNT)
 		{
-		printf("恭喜排雷成功\n");
 		Print_chessboard(nime, ROW, COL);
+		// 游戏结束后输入玩家信息
+		printf("恭喜排雷成功，我将把你拉入排行榜\n请输入您的称号 如：(亿万少女的梦)：>  ");
+		scanf("%s", playerName);
+		seconds = elapsed_time;
+
+		// 更新排行榜
+		updateLeaderboard(playerName, seconds);
+
+		// 显示排行榜
+		displayLeaderboard();
+
+		printf("\n\n\n");
 
 		}
 }
 
 
+
+
+//显示排行榜
+void displayLeaderboard() {
+	printf("=============================================\n");
+	printf("                游戏排行榜                    \n");
+	printf("=============================================\n");
+	printf("%-4s %-15s %-10s\n", "排名", "玩家名字", "用时（秒）");
+
+	// 读取排行榜文件
+	FILE* file = fopen("leaderboard.txt", "r");
+	if (file == NULL) 
+	{
+		perror("打开排行榜文件时出错");
+		exit(EXIT_FAILURE);
+	}
+
+	Player players[MAX_PLAYERS];
+
+	// 从文件中读取玩家信息
+	int i = 0;
+	while (fscanf(file, "%s %d", players[i].name, &players[i].seconds) == 2 && i < MAX_PLAYERS) 
+	{
+		i++;
+	}
+
+	fclose(file);
+
+	// 对玩家按时间进行升序排序
+	for (int j = 0; j < i - 1; j++) 
+	{
+		for (int k = j + 1; k < i; k++)
+		{
+			
+			if (players[j].seconds > players[k].seconds)
+			{
+				Player temp = players[j];
+				players[j] = players[k];
+				players[k] = temp;
+			}
+		}
+	}
+
+	// 打印排行榜
+	for (int j = 0; j < i; j++)
+	{
+		printf("| %-4d %-15s %-10d\n", j + 1, players[j].name, players[j].seconds);
+	}
+}
+
+// 更新排行榜
+void updateLeaderboard(const char* playerName, double seconds) {
+	FILE* file = fopen("leaderboard.txt", "a");
+	if (file == NULL) {
+		perror("打开排行榜文件时出错");
+		exit(EXIT_FAILURE);
+	}
+
+	// 写入新玩家信息到文件
+	fprintf(file, "%s %u\n", playerName, seconds);
+
+	fclose(file);
+}
+
+
+// 清空排行榜
+void clearLeaderboard() {
+	FILE* file = fopen("leaderboard.txt", "w");
+	if (file == NULL) {
+		perror("打开排行榜文件时出错");
+		exit(EXIT_FAILURE);
+	}
+
+	fclose(file);
+}

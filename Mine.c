@@ -2,7 +2,6 @@
 
 void menu()
 {
-	printf("=============================================\n");
 	printf("                  游戏菜单                    \n");
 	printf("=============================================\n");
 	printf("1. 开始游戏\n");
@@ -17,12 +16,22 @@ void meun2()
 	printf("1. 初级难度\n");
 	printf("2. 中级难度\n");
 	printf("3. 高级难度\n");
-	printf("4. 自由定义 \n");
-	printf("2. 查看排行榜\n");
-	printf("3. 设置\n");
+	printf("4. 查看排行榜\n");
+	printf("5. 设置\n");
+	printf("6. 返回上一级目录  \n");
 	printf("=============================================\n");
 }
 
+
+void meun3()
+{
+	printf("                设置                       \n");
+	printf("=============================================\n");
+	printf("1. 清空排行榜\n");
+	printf("2. 自由定义 \n");
+	printf("3. 返回上一级目录  \n");
+	printf("=============================================\n");
+}
 
 void game()
 {
@@ -35,40 +44,39 @@ void game()
 
 	//打印棋盘函数实现
 	Print_chessboard(show, ROW, COL);
-	//Print_chessboard(mine, ROW, COL);
 
 
 	//布置雷
 	Lay_mines(mine, ROW, COL);
 
-	
+	Print_chessboard(mine, ROW, COL); //测试
 
-	//类的排查
+
+	//雷的排查
 	screening(show, mine, ROW, COL);
 
 }
 
 int main()
 {
-	time_t start, end;
-	double elapsed_time;
-	int b;
+	char SETE = 0;
+	int b = 0 ,set = 0;
 	int input = 0; 
 	int input2 = 0;
 
 	srand((unsigned int)time(NULL));
 
-
+	
 	do
 	{
-		menu();
+		E: menu();
 		printf("Please select:>");
 		scanf("%d", &input);
 		system("cls");
 		switch (input)
 		{
 		case 1:
-			meun2();
+			M:meun2();
 			printf("Please select:>");
 			scanf("%d", &input2);
 			system("cls");
@@ -86,12 +94,53 @@ int main()
 				printf("——————————————\n", elapsed_time);
 				printf("|耗时：%.2f 秒|\n", elapsed_time);
 				printf("——————————————\n", elapsed_time);
+				
 				break;
 			case 2:
 				break;
 			case 3:
 				break;
 			case 4:
+				displayLeaderboard();
+				printf("\n\n\n");
+				printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+				break;
+			
+			case 5:
+				meun3();
+				printf("请选择并输入编号:> ");
+				scanf("%d", &set);
+				switch (set)
+				{
+				case 1:
+					while (getchar() != '\n'); // 清空输入缓冲
+					printf("确认清除排行榜吗？ Y/N\n");
+					scanf("%c", &SETE);
+					if (SETE == 'Y')
+					{
+						clearLeaderboard();
+						printf("你已清空排行榜\n");
+
+					}
+					else
+					{
+						printf("你已取消清空排行榜\n");
+					}
+					// 显示排行榜
+					displayLeaderboard();
+					printf("\n\n\n");
+					break;
+				case 2:
+					break;
+				case 3:
+					system("cls");
+					goto M;
+					break;
+				}
+				
+				break;
+			case 6:
+				goto E;
 				break;
 			}
 			break;
@@ -103,6 +152,8 @@ int main()
 			break;
 		}
 	} while (input);
+	
+
 	
 	return 0;
 }
